@@ -52,9 +52,6 @@ void loop() {
 	} else if (!is_locked_out) {
 		led_on(7, 0); // Turn off LED
 	}
-
-	// For some reason things lock up if there isn't a delay
-	delay(1);
 }
 
 void led_on(uint8_t pin, int8_t color) {
