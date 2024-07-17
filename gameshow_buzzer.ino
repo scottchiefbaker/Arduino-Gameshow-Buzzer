@@ -36,6 +36,15 @@ void loop() {
 
 	bool has_buzz_in   = (b1 || b2 || b3);
 	bool is_locked_out = (millis() - last_buzzin) < lockout_time;
+	bool is_tie        = check_tie(b1, b2, b3);
+
+	if (is_tie) {
+		Serial.printf("OMG THERE WAS A TIE\r\n");
+		led_on(7, 6); // Orange
+		delay(2000);
+
+		return;
+	}
 
 	// FIXME: If two buttons trigger at the same time we need to handle that
 	// somehow. Currently B1 will beat B2 and B2 will beat B3 regardless of
@@ -57,6 +66,14 @@ void loop() {
 	} else if (!is_locked_out) {
 		led_on(7, 0); // Turn off LED
 	}
+}
+
+bool check_tie(uint8_t b1, uint8_t b2, uint8_t b3) {
+	if (b1 && b1 == b2) { return true; }
+	if (b2 && b2 == b3) { return true; }
+	if (b3 && b3 == b1) { return true; }
+
+	return false;
 }
 
 void led_on(uint8_t pin, int8_t color) {
