@@ -1,7 +1,7 @@
 const uint8_t RGB_PIN     = 7;
-const uint8_t button1_pin = 0;
-const uint8_t button2_pin = 4;
-const uint8_t button3_pin = 9;
+const uint8_t button1_pin = 0; // Red team
+const uint8_t button2_pin = 4; // Blue team
+const uint8_t button3_pin = 9; // Yellow team
 
 const uint16_t lockout_time = 2500; // Milliseconds
 uint32_t last_buzzin        = 0;
@@ -20,9 +20,9 @@ void setup() {
 	led_on(RGB_PIN, 4); // Purple
 	delay(3000);
 
-	Serial.printf("Red   team is pin #%d\r\n", button1_pin);
-	Serial.printf("Blue  team is pin #%d\r\n", button2_pin);
-	Serial.printf("Green team is pin #%d\r\n", button3_pin);
+	Serial.printf("Red    team is pin #%d\r\n", button1_pin);
+	Serial.printf("Blue   team is pin #%d\r\n", button2_pin);
+	Serial.printf("Yellow team is pin #%d\r\n", button3_pin);
 	Serial.printf("Buzz-in lockout time is %d\r\n\r\n", lockout_time);
 	led_on(RGB_PIN, 0); // Purple
 }
@@ -44,10 +44,10 @@ void loop() {
 			led_on(7, 1); // Red
 		} else if (b2 == 0) {
 			Serial.printf("Team #2 buzzed in\r\n");
-			led_on(7, 2); // Green
+			led_on(7, 3); // Blue
 		} else if (b3 == 0) {
 			Serial.printf("Team #3 buzzed in\r\n");
-			led_on(7, 3); // Blue
+			led_on(7, 5); // Yellow
 		}
 
 		//Serial.printf("B1: %d B2: %d B3: %d\r\n", b1, b2, b3);
