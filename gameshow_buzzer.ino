@@ -28,24 +28,26 @@ void setup() {
 }
 
 void loop() {
-	uint8_t b1 = digitalRead(button1_pin);
-	uint8_t b2 = digitalRead(button2_pin);
-	uint8_t b3 = digitalRead(button3_pin);
+	// These are INPUT_PULLUP so they are HIGH when not pressed so we
+	// invert these so 0 = not pressed and 1 = pressed
+	uint8_t b1 = !digitalRead(button1_pin);
+	uint8_t b2 = !digitalRead(button2_pin);
+	uint8_t b3 = !digitalRead(button3_pin);
 
-	bool has_buzz_in   = (b1 == 0) || (b2 == 0) || (b3 == 0);
+	bool has_buzz_in   = (b1 || b2 || b3);
 	bool is_locked_out = (millis() - last_buzzin) < lockout_time;
 
 	// FIXME: If two buttons trigger at the same time we need to handle that
 	// somehow. Currently B1 will beat B2 and B2 will beat B3 regardless of
 	// timing. Maybe randomize?
 	if (has_buzz_in && !is_locked_out) {
-		if (b1 == 0) {
+		if (b1) {
 			Serial.printf("Team #1 buzzed in\r\n");
 			led_on(7, 1); // Red
-		} else if (b2 == 0) {
+		} else if (b2) {
 			Serial.printf("Team #2 buzzed in\r\n");
 			led_on(7, 3); // Blue
-		} else if (b3 == 0) {
+		} else if (b3) {
 			Serial.printf("Team #3 buzzed in\r\n");
 			led_on(7, 5); // Yellow
 		}
