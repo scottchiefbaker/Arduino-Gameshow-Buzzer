@@ -47,6 +47,9 @@ void loop() {
 	bool is_locked_out = (millis() - last_buzzin) < lockout_time;
 	bool is_tie        = check_tie(b1, b2, b3);
 
+	// FIXME: If two buttons trigger at the same time we need to handle that
+	// somehow. Currently B1 will beat B2 and B2 will beat B3 regardless of
+	// timing. Maybe randomize?
 	if (is_tie) {
 		Serial.printf("OMG THERE WAS A TIE\r\n");
 		led_on(RGB_PIN, RGB_ORANGE); // Orange
@@ -55,9 +58,6 @@ void loop() {
 		return;
 	}
 
-	// FIXME: If two buttons trigger at the same time we need to handle that
-	// somehow. Currently B1 will beat B2 and B2 will beat B3 regardless of
-	// timing. Maybe randomize?
 	if (has_buzz_in && !is_locked_out) {
 		if (b1) {
 			Serial.printf("Team #1 buzzed in\r\n");
