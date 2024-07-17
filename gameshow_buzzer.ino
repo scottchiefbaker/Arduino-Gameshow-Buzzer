@@ -7,6 +7,15 @@ const uint16_t lockout_time = 2500; // Milliseconds
 uint32_t last_buzzin        = 0;
 int8_t last_color           = -1;
 
+#define RGB_RED    1
+#define RGB_GREEN  2
+#define RGB_BLUE   3
+#define RGB_PURPLE 4
+#define RGB_YELLOW 5
+#define RGB_ORANGE 6
+#define RGB_WHITE  7
+#define RGB_OFF    0
+
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
 
@@ -17,14 +26,14 @@ void setup() {
 	pinMode(button2_pin, INPUT_PULLUP);
 	pinMode(button3_pin, INPUT_PULLUP);
 
-	led_on(RGB_PIN, 4); // Purple
+	led_on(RGB_PIN, RGB_PURPLE); // Purple
 	delay(3000);
 
 	Serial.printf("Red    team is pin #%d\r\n", button1_pin);
 	Serial.printf("Blue   team is pin #%d\r\n", button2_pin);
 	Serial.printf("Yellow team is pin #%d\r\n", button3_pin);
 	Serial.printf("Buzz-in lockout time is %d\r\n\r\n", lockout_time);
-	led_on(RGB_PIN, 0); // Purple
+	led_on(RGB_PIN, RGB_OFF); // Off
 }
 
 void loop() {
@@ -40,7 +49,7 @@ void loop() {
 
 	if (is_tie) {
 		Serial.printf("OMG THERE WAS A TIE\r\n");
-		led_on(RGB_PIN, 6); // Orange
+		led_on(RGB_PIN, RGB_ORANGE); // Orange
 		delay(2000);
 
 		return;
@@ -52,19 +61,19 @@ void loop() {
 	if (has_buzz_in && !is_locked_out) {
 		if (b1) {
 			Serial.printf("Team #1 buzzed in\r\n");
-			led_on(RGB_PIN, 1); // Red
+			led_on(RGB_PIN, RGB_RED); // Red
 		} else if (b2) {
 			Serial.printf("Team #2 buzzed in\r\n");
-			led_on(RGB_PIN, 3); // Blue
+			led_on(RGB_PIN, RGB_BLUE); // Blue
 		} else if (b3) {
 			Serial.printf("Team #3 buzzed in\r\n");
-			led_on(RGB_PIN, 5); // Yellow
+			led_on(RGB_PIN, RGB_YELLOW); // Yellow
 		}
 
 		//Serial.printf("B1: %d B2: %d B3: %d\r\n", b1, b2, b3);
 		last_buzzin = millis();
 	} else if (!is_locked_out) {
-		led_on(RGB_PIN, 0); // Turn off LED
+		led_on(RGB_PIN, RGB_OFF); // Turn off LED
 	}
 }
 
@@ -86,19 +95,19 @@ void led_on(uint8_t pin, int8_t color) {
 
 	//Serial.printf("Setting pin #%d to color %d\r\n", pin, color);
 
-	if (color == 1) {
+	if (color == RGB_RED) {
 		neopixelWrite(pin,brightness,0,0); // Red
-	} else if (color == 2) {
+	} else if (color == RGB_GREEN) {
 		neopixelWrite(pin,0,brightness,0); // Green
-	} else if (color == 3) {
+	} else if (color == RGB_BLUE) {
 		neopixelWrite(pin,0,0,brightness); // Blue
-	} else if (color == 4) {
+	} else if (color == RGB_PURPLE) {
 		neopixelWrite(pin,brightness,0,brightness); // Purple
-	} else if (color == 5) {
+	} else if (color == RGB_YELLOW) {
 		neopixelWrite(pin,brightness,brightness,0); // Yellow
-	} else if (color == 6) {
+	} else if (color == RGB_ORANGE) {
 		neopixelWrite(pin,brightness,brightness / 5,0); // Orange
-	} else if (color == 7) {
+	} else if (color == RGB_WHITE) {
 		neopixelWrite(pin,0,brightness,brightness); // White
 	} else {
 		neopixelWrite(pin,0,0,0); // Off/Black
