@@ -40,7 +40,7 @@ void loop() {
 
 	if (is_tie) {
 		Serial.printf("OMG THERE WAS A TIE\r\n");
-		led_on(7, 6); // Orange
+		led_on(RGB_PIN, 6); // Orange
 		delay(2000);
 
 		return;
@@ -52,19 +52,19 @@ void loop() {
 	if (has_buzz_in && !is_locked_out) {
 		if (b1) {
 			Serial.printf("Team #1 buzzed in\r\n");
-			led_on(7, 1); // Red
+			led_on(RGB_PIN, 1); // Red
 		} else if (b2) {
 			Serial.printf("Team #2 buzzed in\r\n");
-			led_on(7, 3); // Blue
+			led_on(RGB_PIN, 3); // Blue
 		} else if (b3) {
 			Serial.printf("Team #3 buzzed in\r\n");
-			led_on(7, 5); // Yellow
+			led_on(RGB_PIN, 5); // Yellow
 		}
 
 		//Serial.printf("B1: %d B2: %d B3: %d\r\n", b1, b2, b3);
 		last_buzzin = millis();
 	} else if (!is_locked_out) {
-		led_on(7, 0); // Turn off LED
+		led_on(RGB_PIN, 0); // Turn off LED
 	}
 }
 
