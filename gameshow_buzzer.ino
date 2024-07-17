@@ -5,6 +5,7 @@ const uint8_t button3_pin = 9;
 
 const uint16_t lockout_time = 2500; // Milliseconds
 uint32_t last_buzzin        = 0;
+int8_t last_color           = -1;
 
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
@@ -59,6 +60,13 @@ void loop() {
 void led_on(uint8_t pin, int8_t color) {
 	int8_t brightness = 20;
 
+	// Only set the color if it has changed
+	if (color == last_color) {
+		return;
+	}
+
+	//Serial.printf("Setting pin #%d to color %d\r\n", pin, color);
+
 	if (color == 1) {
 		neopixelWrite(pin,brightness,0,0); // Red
 	} else if (color == 2) {
@@ -76,4 +84,6 @@ void led_on(uint8_t pin, int8_t color) {
 	} else {
 		neopixelWrite(pin,0,0,0); // Off/Black
 	}
+
+	last_color = color;
 }
