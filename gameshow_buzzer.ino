@@ -35,6 +35,9 @@ void loop() {
 	bool has_buzz_in   = (b1 == 0) || (b2 == 0) || (b3 == 0);
 	bool is_locked_out = (millis() - last_buzzin) < lockout_time;
 
+	// FIXME: If two buttons trigger at the same time we need to handle that
+	// somehow. Currently B1 will beat B2 and B2 will beat B3 regardless of
+	// timing. Maybe randomize?
 	if (has_buzz_in && !is_locked_out) {
 		if (b1 == 0) {
 			Serial.printf("Team #1 buzzed in\r\n");
