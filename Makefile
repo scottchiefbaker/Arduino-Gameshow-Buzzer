@@ -23,12 +23,12 @@
 #BOARD = arduino:avr:nano:cpu=atmega328                                 # Arduino Nano
 #BOARD = esp8266:esp8266:nodemcuv2:baud=460800                          # NodeMCU/ESP8266
 #BOARD = esp8266:esp8266:d1_mini:baud=921600                            # Wemos D1 Mini
-#BOARD = esp32:esp32:esp32:CPUFreq=240,FlashMode=qio,UploadSpeed=921600 # ESP32
+BOARD = esp32:esp32:esp32:CPUFreq=240,FlashMode=qio,UploadSpeed=921600 # ESP32
 #BOARD = esp32:esp32:lolin_s2_mini
-BOARD = esp32:esp32:lolin_c3_mini
+#BOARD = esp32:esp32:lolin_c3_mini
 
-#PORT ?= /dev/ttyUSB0
-PORT = /dev/ttyACM0
+PORT ?= /dev/ttyUSB0
+#PORT = /dev/ttyACM0
 
 # For WebOTA: https://github.com/scottchiefbaker/ESP-WebOTA
 WEBOTA_URL ?= http://192.168.5.114:8080/webota
