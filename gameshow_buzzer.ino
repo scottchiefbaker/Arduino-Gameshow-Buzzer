@@ -1,7 +1,11 @@
-const uint8_t RGB_PIN     = 7;
-const uint8_t button1_pin = 0; // Red team
-const uint8_t button2_pin = 4; // Blue team
-const uint8_t button3_pin = 9; // Yellow team
+#include <FastLED.h>
+
+const uint8_t RGB_PIN     = 23; // Pin the ds2812s are on
+CRGB leds[100];                 // Number of LEDs
+
+const uint8_t button1_pin = 15; // Red team
+const uint8_t button2_pin = 16; // Blue team
+const uint8_t button3_pin = 4;  // Yellow team
 
 const uint16_t lockout_time = 2500; // Milliseconds
 uint32_t last_buzzin        = 0;
@@ -22,11 +26,15 @@ int8_t last_color           = -1;
 void setup() {
 	Serial.begin(115200);
 
+	// Init FastLED in RGB mode (GRB, or BRG also available)
+	FastLED.addLeds<WS2812, RGB_PIN, RGB>(leds, LED_COUNT);
+	FastLED.setBrightness(128);
+
 	pinMode(button1_pin, INPUT_PULLUP);
 	pinMode(button2_pin, INPUT_PULLUP);
 	pinMode(button3_pin, INPUT_PULLUP);
 
-	led_on(RGB_PIN, RGB_PURPLE); // Purple
+	led_on(RGB_PIN, RGB_GREEN); // Green
 	delay(3000);
 
 	Serial.printf("Red    team is pin #%d\r\n", button1_pin);
@@ -52,26 +60,27 @@ void loop() {
 	// timing. Maybe randomize?
 	if (is_tie) {
 		Serial.printf("OMG THERE WAS A TIE\r\n");
-		led_on(RGB_PIN, RGB_ORANGE); // Orange
-		delay(2000);
+		led_on(RGB_PIN, RGB_WHITE);
+		delay(200);
 
 		return;
 	}
 
 	if (has_buzz_in && !is_locked_out) {
+		last_buzzin = millis();
+
 		if (b1) {
 			Serial.printf("Team #1 buzzed in\r\n");
-			led_on(RGB_PIN, RGB_RED); // Red
+			buzz_in(1);
 		} else if (b2) {
 			Serial.printf("Team #2 buzzed in\r\n");
-			led_on(RGB_PIN, RGB_BLUE); // Blue
+			buzz_in(2);
 		} else if (b3) {
 			Serial.printf("Team #3 buzzed in\r\n");
-			led_on(RGB_PIN, RGB_YELLOW); // Yellow
+			buzz_in(3);
 		}
 
 		//Serial.printf("B1: %d B2: %d B3: %d\r\n", b1, b2, b3);
-		last_buzzin = millis();
 	} else if (!is_locked_out) {
 		led_on(RGB_PIN, RGB_OFF); // Turn off LED
 	}
@@ -85,9 +94,27 @@ bool check_tie(uint8_t b1, uint8_t b2, uint8_t b3) {
 	return false;
 }
 
-void led_on(uint8_t pin, int8_t color) {
-	int8_t brightness = 20;
+void buzz_in(int8_t team_num) {
+	int8_t color = 0;
 
+	if (team_num == 1) {
+		color = RGB_RED;
+	} else if (team_num == 2) {
+		color = RGB_BLUE;
+	} else if (team_num == 3) {
+		color = RGB_YELLOW;
+	}
+
+	// Flashing affect with the team color
+	for (int i = 0; i < 10; i++) {
+		led_on(RGB_PIN, color);
+		delay(100);
+		led_on(RGB_PIN, RGB_OFF);
+		delay(100);
+	}
+}
+
+void led_on(uint8_t pin, int8_t color) {
 	// Only set the color if it has changed
 	if (color == last_color) {
 		return;
@@ -95,23 +122,26 @@ void led_on(uint8_t pin, int8_t color) {
 
 	//Serial.printf("Setting pin #%d to color %d\r\n", pin, color);
 
+	// Turn on ALL the LEDs in the string
 	if (color == RGB_RED) {
-		neopixelWrite(pin,brightness,0,0); // Red
+		for (uint16_t i = 0; i < LED_COUNT; i++) { leds[i] = CRGB::Red; }
 	} else if (color == RGB_GREEN) {
-		neopixelWrite(pin,0,brightness,0); // Green
+		for (uint16_t i = 0; i < LED_COUNT; i++) { leds[i] = CRGB::Green; }
 	} else if (color == RGB_BLUE) {
-		neopixelWrite(pin,0,0,brightness); // Blue
+		for (uint16_t i = 0; i < LED_COUNT; i++) { leds[i] = CRGB::Blue; }
 	} else if (color == RGB_PURPLE) {
-		neopixelWrite(pin,brightness,0,brightness); // Purple
+		for (uint16_t i = 0; i < LED_COUNT; i++) { leds[i] = CRGB::Purple; }
 	} else if (color == RGB_YELLOW) {
-		neopixelWrite(pin,brightness,brightness,0); // Yellow
+		for (uint16_t i = 0; i < LED_COUNT; i++) { leds[i] = CRGB::Yellow; }
 	} else if (color == RGB_ORANGE) {
-		neopixelWrite(pin,brightness,brightness / 5,0); // Orange
+		for (uint16_t i = 0; i < LED_COUNT; i++) { leds[i] = CRGB(255, 255 / 6.0, 0); }
 	} else if (color == RGB_WHITE) {
-		neopixelWrite(pin,0,brightness,brightness); // White
+		for (uint16_t i = 0; i < LED_COUNT; i++) { leds[i] = CRGB::White; }
 	} else {
-		neopixelWrite(pin,0,0,0); // Off/Black
+		for (uint16_t i = 0; i < LED_COUNT; i++) { leds[i] = CRGB::Black; }
 	}
+
+	FastLED.show();
 
 	last_color = color;
 }
