@@ -1,7 +1,8 @@
 #include <FastLED.h>
 
 const uint8_t RGB_PIN     = 23; // Pin the ds2812s are on
-CRGB leds[100];                 // Number of LEDs
+const uint16_t LED_COUNT  = 200; // Number of LEDs on the strip
+CRGB leds[LED_COUNT];
 
 const uint8_t button1_pin = 15; // Red team
 const uint8_t button2_pin = 16; // Blue team
