@@ -71,13 +71,13 @@ void loop() {
 		last_buzzin = millis();
 
 		if (b1) {
-			Serial.printf("Team #1 buzzed in\r\n");
+			Serial.printf("Red Team #1 buzzed in\r\n");
 			buzz_in(1);
 		} else if (b2) {
-			Serial.printf("Team #2 buzzed in\r\n");
+			Serial.printf("Blue Team #2 buzzed in\r\n");
 			buzz_in(2);
 		} else if (b3) {
-			Serial.printf("Team #3 buzzed in\r\n");
+			Serial.printf("Yellow Team #3 buzzed in\r\n");
 			buzz_in(3);
 		}
 
