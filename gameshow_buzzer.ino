@@ -60,15 +60,11 @@ void loop() {
 	bool is_locked_out = (millis() - last_buzzin) < lockout_time;
 	bool is_tie        = check_tie(b1, b2, b3);
 
-	// FIXME: If two buttons trigger at the same time we need to handle that
-	// somehow. Currently B1 will beat B2 and B2 will beat B3 regardless of
-	// timing. Maybe randomize?
+	// If there is a tie we randomly choose a team the tied to "win" in check_tie()
 	if (is_tie) {
 		Serial.printf("OMG THERE WAS A TIE\r\n");
-		led_on(RGB_PIN, RGB_WHITE);
-		delay(200);
-
-		return;
+		//led_on(RGB_PIN, RGB_WHITE);
+		//delay(10);
 	}
 
 	if (has_buzz_in && !is_locked_out) {
@@ -91,10 +87,62 @@ void loop() {
 	}
 }
 
-bool check_tie(uint8_t b1, uint8_t b2, uint8_t b3) {
-	if (b1 && b1 == b2) { return true; }
-	if (b2 && b2 == b3) { return true; }
-	if (b3 && b3 == b1) { return true; }
+bool check_tie(uint8_t &b1, uint8_t &b2, uint8_t &b3) {
+	// Seed the random numbers with uptime micros
+	srand(micros());
+
+	// Three way tie!?!
+	if ((b1 && b1 == b2) && (b3 == b2)) {
+		int rand = random(100) % 3;
+
+		// Set them all to zero
+		b1 = b2 = b3 = 0;
+
+		if      (rand == 0) { b1 = 1; }
+		else if (rand == 1) { b2 = 1; }
+		else if (rand == 2) { b3 = 1; }
+
+		return true;
+	}
+
+	// Tie between 1 and 2
+	if (b1 && b1 == b2) {
+		int rand = random(100) % 2;
+
+		// Set them all to zero
+		b1 = b2 = 0;
+
+		if      (rand == 0) { b1 = 1; }
+		else if (rand == 1) { b2 = 1; }
+
+		return true;
+	}
+
+	// Tie between 2 and 3
+	if (b2 && b2 == b3) {
+		int rand = random(100) % 2;
+
+		// Set them all to zero
+		b2 = b3 = 0;
+
+		if      (rand == 0) { b2 = 1; }
+		else if (rand == 1) { b3 = 1; }
+
+		return true;
+	}
+
+	// Tie between 1 and 3
+	if (b3 && b3 == b1) {
+		int rand = random(100) % 2;
+
+		// Set them all to zero
+		b1 = b3 = 0;
+
+		if      (rand == 0) { b1 = 1; }
+		else if (rand == 1) { b3 = 1; }
+
+		return true;
+	}
 
 	return false;
 }
