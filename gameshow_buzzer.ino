@@ -1,12 +1,12 @@
 #include <FastLED.h>
 
-const uint8_t RGB_PIN     = 23; // Pin the ds2812s are on
-const uint16_t LED_COUNT  = 200; // Number of LEDs on the strip
+const uint8_t RGB_PIN    = 33;  // Pin the ds2812s are on
+const uint16_t LED_COUNT = 200; // Number of LEDs on the strip
 CRGB leds[LED_COUNT];
 
-const uint8_t button1_pin = 15; // Red team
-const uint8_t button2_pin = 16; // Blue team
-const uint8_t button3_pin = 4;  // Yellow team
+const uint8_t button1_pin = 39; // Red team
+const uint8_t button2_pin = 37; // Blue team
+const uint8_t button3_pin = 35; // Yellow team
 
 const uint16_t lockout_time = 2500; // Milliseconds
 uint32_t last_buzzin        = 0;
@@ -28,7 +28,7 @@ void setup() {
 	Serial.begin(115200);
 
 	// Init FastLED in RGB mode (GRB, or BRG also available)
-	FastLED.addLeds<WS2812, RGB_PIN, RGB>(leds, LED_COUNT);
+	FastLED.addLeds<WS2812, RGB_PIN, BGR>(leds, LED_COUNT);
 	FastLED.setBrightness(128);
 
 	led_on(RGB_PIN, RGB_RED);
