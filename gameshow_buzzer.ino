@@ -31,12 +31,16 @@ void setup() {
 	FastLED.addLeds<WS2812, RGB_PIN, RGB>(leds, LED_COUNT);
 	FastLED.setBrightness(128);
 
+	led_on(RGB_PIN, RGB_RED);
+	delay(1000);
+	led_on(RGB_PIN, RGB_BLUE);
+	delay(1000);
+	led_on(RGB_PIN, RGB_GREEN);
+	delay(1000);
+
 	pinMode(button1_pin, INPUT_PULLUP);
 	pinMode(button2_pin, INPUT_PULLUP);
 	pinMode(button3_pin, INPUT_PULLUP);
-
-	led_on(RGB_PIN, RGB_GREEN); // Green
-	delay(3000);
 
 	Serial.printf("Red    team is pin #%d\r\n", button1_pin);
 	Serial.printf("Blue   team is pin #%d\r\n", button2_pin);
