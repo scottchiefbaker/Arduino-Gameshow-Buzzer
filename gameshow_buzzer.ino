@@ -10,7 +10,7 @@ const uint8_t button1_pin = 39; // Red team
 const uint8_t button2_pin = 37; // Blue team
 const uint8_t button3_pin = 35; // Yellow team
 
-const uint16_t lockout_time = 2500; // Milliseconds
+const uint16_t lockout_time = 4000; // Milliseconds
 uint32_t last_buzzin        = 0;
 int8_t last_color           = -1;
 
