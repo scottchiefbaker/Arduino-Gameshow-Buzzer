@@ -1,5 +1,7 @@
 #include <FastLED.h>
 
+const String VERSION = "v0.1.1";
+
 const uint8_t RGB_PIN    = 33;  // Pin the ds2812s are on
 const uint16_t LED_COUNT = 200; // Number of LEDs on the strip
 CRGB leds[LED_COUNT];
@@ -45,6 +47,7 @@ void setup() {
 	pinMode(button2_pin, INPUT_PULLUP);
 	pinMode(button3_pin, INPUT_PULLUP);
 
+	Serial.printf("Gameshow Buzzer %s\r\n\r\n", VERSION.c_str());
 	Serial.printf("Red    team is pin #%d\r\n", button1_pin);
 	Serial.printf("Blue   team is pin #%d\r\n", button2_pin);
 	Serial.printf("Yellow team is pin #%d\r\n", button3_pin);
