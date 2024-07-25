@@ -27,9 +27,12 @@ int8_t last_color           = -1;
 void setup() {
 	Serial.begin(115200);
 
-	// Init FastLED in RGB mode (GRB, or BRG also available)
-	FastLED.addLeds<WS2812, RGB_PIN, BGR>(leds, LED_COUNT);
-	FastLED.setBrightness(128);
+	// River Room production - GRB
+	FastLED.addLeds<WS2812, RGB_PIN, GRB>(leds, LED_COUNT);
+	// Test bed LED strand - BGR
+	//FastLED.addLeds<WS2812, RGB_PIN, BGR>(leds, LED_COUNT);
+
+	FastLED.setBrightness(99);
 
 	led_on(RGB_PIN, RGB_RED);
 	delay(1000);
