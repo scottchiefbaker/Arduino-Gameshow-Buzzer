@@ -10,9 +10,10 @@ const uint8_t button1_pin = 39; // Red team
 const uint8_t button2_pin = 37; // Blue team
 const uint8_t button3_pin = 35; // Yellow team
 
-const uint16_t lockout_time = 4000; // Milliseconds
-uint32_t last_buzzin        = 0;
-int8_t last_color           = -1;
+const uint8_t attract_minutes = 2;    // Minutes of inactivity before attract mode starts
+const uint16_t lockout_time   = 3000; // Lockout other buttons for X milliseconds after a buzz-in
+uint32_t last_buzzin          = 0;
+int8_t last_color             = -1;
 
 #define RGB_RED    1
 #define RGB_GREEN  2
@@ -97,7 +98,6 @@ void loop() {
 }
 
 bool enter_attract_mode() {
-	const uint8_t attract_minutes    = 5;
 	const uint32_t next_attract_time = last_buzzin + (attract_minutes * 60 * 1000);
 
 	bool ret = false;
