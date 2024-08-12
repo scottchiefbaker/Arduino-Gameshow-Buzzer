@@ -1,4 +1,9 @@
 #include <FastLED.h>
+#include <YX5300_ESP32.h>
+
+// *make sure the RX on the YX5300 goes to the TX on the ESP32, and vice-versa
+#define YX5300_RX 5
+#define YX5300_TX 3
 
 const String VERSION = "v0.1.1";
 
@@ -24,11 +29,15 @@ int8_t last_color             = -1;
 #define RGB_WHITE  7
 #define RGB_OFF    0
 
+YX5300_ESP32 mp3; // The global MP3 object for playing sound effects
+
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
 
 void setup() {
 	Serial.begin(115200);
+
+	mp3 = YX5300_ESP32(Serial1, YX5300_RX, YX5300_TX);
 
 	// River Room production - GRB
 	FastLED.addLeds<WS2812, RGB_PIN, GRB>(leds, LED_COUNT);
@@ -76,6 +85,9 @@ void loop() {
 
 	if (has_buzz_in && !is_locked_out) {
 		last_buzzin = millis();
+
+		// Play the first MP3 in the first folder
+		play_sound(1);
 
 		if (b1) {
 			Serial.printf("Red Team #1 buzzed in\r\n");
@@ -267,4 +279,10 @@ void led_on(uint8_t pin, int8_t color) {
 	FastLED.show();
 
 	last_color = color;
+}
+
+bool play_sound(uint16_t num) {
+	mp3.playTrack(num);
+
+	return true;
 }
