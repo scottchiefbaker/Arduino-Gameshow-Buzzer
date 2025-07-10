@@ -48,9 +48,9 @@ void setup() {
 
 	led_on(RGB_PIN, RGB_RED);
 	delay(1000);
-	led_on(RGB_PIN, RGB_BLUE);
-	delay(1000);
 	led_on(RGB_PIN, RGB_GREEN);
+	delay(1000);
+	led_on(RGB_PIN, RGB_BLUE);
 	delay(1000);
 
 	pinMode(button1_pin, INPUT_PULLUP);
