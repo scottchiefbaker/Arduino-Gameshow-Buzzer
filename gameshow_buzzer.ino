@@ -5,7 +5,7 @@
 #define YX5300_RX 5
 #define YX5300_TX 3
 
-const String VERSION = "v0.1.1";
+const String VERSION = "v0.1.2";
 
 const uint8_t RGB_PIN    = 33;  // Pin the ds2812s are on
 const uint16_t LED_COUNT = 200; // Number of LEDs on the strip
